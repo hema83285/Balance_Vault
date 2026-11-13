@@ -279,23 +279,16 @@ npm test
 
 ## 🌐 Production Deployment Guide
 
-### Frontend Deployment (Vercel)
-1. Link the repository to [Vercel](https://vercel.com).
-2. Set Root Directory to `frontend`.
-3. Configure Build Command: `npm run build` and Output Directory: `dist`.
-4. Add Environment Variable:
-   - `VITE_API_URL`: URL of your deployed Render backend (e.g. `https://balancevault-backend.onrender.com/api`).
+### Render Deployment
+The root `render.yaml` Blueprint deploys the API as a web service and the React app as a static site. On the first successful API deploy, an initialization hook runs `prisma db push` against the dedicated schema in `DATABASE_URL`.
 
-### Backend Deployment (Render)
-1. Create a new **Web Service** on [Render](https://render.com).
-2. Set Root Directory to `backend`.
-3. Build Command: `npm install && npx prisma generate`
-4. Start Command: `node server.js`
-5. Configure Environment Variables in Render:
-   - `DATABASE_URL`: Connection string to your managed Neon PostgreSQL instance.
-   - `JWT_SECRET`: High-entropy 64-character secret.
-   - `FRONTEND_URL`: URL of your deployed Vercel frontend.
-   - `NODE_ENV`: `production`
+1. Push the repository to GitHub and sign in to [Render](https://dashboard.render.com/).
+2. Select **New > Blueprint**, connect this repository, and choose the `main` branch.
+3. Enter a PostgreSQL `DATABASE_URL` when prompted. Use a managed PostgreSQL URL with SSL and the `schema=balancevault_app` query parameter; do not use the local development URL.
+4. Review the two services and deploy the Blueprint. Render generates `JWT_SECRET` and connects the frontend API URL automatically.
+5. After deployment, verify the backend's `/health` endpoint and open the static site's URL.
+
+The Blueprint uses Render's free web-service plan, which may spin down when idle. Its `DATABASE_URL` is a secret and should only be entered in Render, never committed to this repository.
 
 ---
 
