@@ -279,16 +279,15 @@ npm test
 
 ## 🌐 Production Deployment Guide
 
-### Render Deployment
-The root `render.yaml` Blueprint deploys the API as a web service and the React app as a static site. On the first successful API deploy, an initialization hook runs `prisma db push` against the dedicated schema in `DATABASE_URL`.
+### Backend Deployment (Render)
+The root `render.yaml` Blueprint creates a new API web service and a new PostgreSQL database. On the API's first successful deploy, an initialization hook runs `prisma db push`.
 
 1. Push the repository to GitHub and sign in to [Render](https://dashboard.render.com/).
 2. Select **New > Blueprint**, connect this repository, and choose the `main` branch.
-3. Enter a PostgreSQL `DATABASE_URL` when prompted. Use a managed PostgreSQL URL with SSL and the `schema=balancevault_app` query parameter; do not use the local development URL.
-4. Review the two services and deploy the Blueprint. Render generates `JWT_SECRET` and connects the frontend API URL automatically.
-5. After deployment, verify the backend's `/health` endpoint and open the static site's URL.
+3. Review the `balancevault-api` service and `balancevault-api-db` database, then deploy the Blueprint.
+4. Render generates `JWT_SECRET` and connects the API to the new database. Verify the backend's `/health` endpoint after deployment.
 
-The Blueprint uses Render's free web-service plan, which may spin down when idle. Its `DATABASE_URL` is a secret and should only be entered in Render, never committed to this repository.
+Both resources use Render's Free plan. Free web services spin down when idle, and Free Postgres databases expire 30 days after creation. This Blueprint deploys only the backend; deploy the frontend separately when needed.
 
 ---
 

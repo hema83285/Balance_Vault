@@ -3,6 +3,7 @@ services:
     name: balancevault-api
     runtime: node
     plan: free
+    region: oregon
     rootDir: backend
     buildCommand: npm ci --include=dev && npx prisma generate
     startCommand: node server.js
@@ -12,22 +13,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: balancevault-api-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
-      - key: FRONTEND_URL
-        value: https://${{balancevault-web.host}}
 
-  - type: web
-    name: balancevault-web
-    runtime: static
-    rootDir: frontend
-    buildCommand: npm ci --include=dev && npm run build
-    staticPublishPath: dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://${{balancevault-api.host}}/api
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+databases:
+  - name: balancevault-api-db
+    plan: free
+    region: oregon
