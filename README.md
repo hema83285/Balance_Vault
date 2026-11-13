@@ -124,12 +124,12 @@ cp .env.example .env
 
 Edit `backend/.env` with your PostgreSQL connection string:
 ```ini
-PORT=5000
+PORT=5001
 NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:5175
 
 # Managed PostgreSQL (e.g. Neon.tech connection URL)
-DATABASE_URL="postgresql://user:password@ep-sample-pooler.us-east-1.aws.neon.tech/balancevault?sslmode=require"
+DATABASE_URL="postgresql://user:password@ep-sample-pooler.us-east-1.aws.neon.tech/balancevault?sslmode=require&schema=balancevault_app"
 
 # Redis Cache (Optional - leave blank for in-memory fallback)
 REDIS_URL=""
@@ -142,6 +142,8 @@ JWT_EXPIRES_IN="24h"
 SEED_ADMIN_EMAIL="admin@balancevault.internal"
 SEED_ADMIN_PASSWORD="AdminSecure#2026"
 ```
+
+The `schema=balancevault_app` setting keeps this app's tables separate from existing tables in the database. Keep it when using a database that already contains data; do not force a schema push that reports data loss.
 
 Configure frontend environment:
 ```bash
@@ -164,6 +166,8 @@ npx prisma generate
 # Push schema directly to database
 npx prisma db push
 ```
+
+The schema push should target the dedicated `balancevault_app` schema configured in `DATABASE_URL`.
 
 ---
 
@@ -190,7 +194,7 @@ Output confirmation:
 
 ### 6. Starting Backend and Frontend
 
-You can run both concurrently from the root directory or in separate terminals:
+Choose one startup option. Do not start the same backend or frontend in both options at once.
 
 #### Option A: Run Both Concurrently (From Root)
 ```bash
@@ -203,17 +207,17 @@ npm run dev
 ```bash
 cd backend
 npm run dev
-# Server runs at http://localhost:5000
+# Server runs at http://localhost:5001
 ```
 
 **Terminal 2 (Frontend React Application):**
 ```bash
 cd frontend
 npm run dev
-# Frontend runs at http://localhost:5173
+# Frontend runs at http://localhost:5175
 ```
 
-Open your browser at **`http://localhost:5173`**.
+Open your browser at **`http://localhost:5175`**.
 
 ---
 

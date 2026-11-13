@@ -2,7 +2,7 @@ const app = require('./src/app');
 const ENV = require('./src/config/env');
 const prisma = require('./src/config/db');
 
-const PORT = ENV.PORT || 5000;
+const PORT = ENV.PORT || 5001;
 
 const server = app.listen(PORT, () => {
   console.log(`===============================================`);

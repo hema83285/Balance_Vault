@@ -29,13 +29,14 @@ export default function Navbar() {
         </div>
 
         <button
+          type="button"
           onClick={logout}
           className="btn btn-secondary btn-sm"
-          title="Sign Out"
+          aria-label="Log out"
           style={{ padding: '8px 12px' }}
         >
-          <LogOut size={16} />
-          <span style={{ display: 'none', md: 'inline' }}>Logout</span>
+          <LogOut size={16} aria-hidden="true" />
+          <span>Log out</span>
         </button>
       </div>
     </header>
