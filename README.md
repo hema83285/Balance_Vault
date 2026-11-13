@@ -280,14 +280,14 @@ npm test
 ## 🌐 Production Deployment Guide
 
 ### Backend Deployment (Render)
-The root `render.yaml` Blueprint creates a new API web service and a new PostgreSQL database. On the API's first successful deploy, an initialization hook runs `prisma db push`.
+The root `render.yaml` Blueprint creates a new API web service and reuses the existing Render Postgres instance named `balancevault-db`. On the API's first successful deploy, an initialization hook runs `prisma db push`.
 
 1. Push the repository to GitHub and sign in to [Render](https://dashboard.render.com/).
 2. Select **New > Blueprint**, connect this repository, and choose the `main` branch.
-3. Review the `balancevault-api` service and `balancevault-api-db` database, then deploy the Blueprint.
-4. Render generates `JWT_SECRET` and connects the API to the new database. Verify the backend's `/health` endpoint after deployment.
+3. Review the `balancevault-api` service and confirm the Blueprint references the existing `balancevault-db` database.
+4. Deploy the Blueprint. Render injects the database connection string and generates `JWT_SECRET`; verify the backend's `/health` endpoint after deployment.
 
-Both resources use Render's Free plan. Free web services spin down when idle, and Free Postgres databases expire 30 days after creation. This Blueprint deploys only the backend; deploy the frontend separately when needed.
+The API and database use Render's Free plan. Free web services spin down when idle, and Free Postgres databases expire 30 days after creation. This Blueprint deploys only the backend; deploy the frontend separately when needed.
 
 ---
 
